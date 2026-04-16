@@ -1,0 +1,348 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>MX Carrier Formats Standard</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Mozilla+Headline:wght@400;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --page-bg: #ffffff;
+      --ink: #2c2c2c;
+      --muted: #666666;
+      --rule: #e6e6e6;
+      --accent: #4b79aa;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      background: var(--page-bg);
+      color: var(--ink);
+      font-family: "Mozilla Headline", sans-serif;
+      line-height: 1.42;
+    }
+    main {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding: 48px 36px 64px;
+    }
+    .page-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 74ch) minmax(240px, 300px);
+      gap: 56px;
+      align-items: start;
+    }
+    .doc {
+      min-width: 0;
+      font-size: 16px;
+    }
+    .doc-header {
+      margin-bottom: 1.8rem;
+    }
+    .doc-meta {
+      margin: 0 0 1.9rem;
+      font-size: 0.92rem;
+      font-family: "Mozilla Headline", sans-serif;
+    }
+    .doc-meta-row {
+      display: grid;
+      grid-template-columns: 132px minmax(0, 1fr);
+      gap: 12px;
+    }
+    .doc-meta-row + .doc-meta-row {
+      margin-top: 0.18rem;
+    }
+    .doc-meta dt,
+    .doc-meta dd {
+      margin: 0;
+    }
+    .doc-meta dt {
+      text-align: right;
+      color: var(--muted);
+    }
+    h1, h2, h3, h4 {
+      margin: 0 0 0.75rem;
+      line-height: 1.3;
+      color: var(--ink);
+      font-weight: 700;
+      font-family: "Mozilla Headline", sans-serif;
+    }
+    .doc-title {
+      font-size: 1.15rem;
+      margin-bottom: 0.3rem;
+    }
+    .doc-subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+    h2 {
+      margin-top: 1.7rem;
+      font-size: 1rem;
+    }
+    h3 {
+      margin-top: 1.35rem;
+      font-size: 1rem;
+    }
+    h4 {
+      margin-top: 1.1rem;
+      font-size: 1rem;
+    }
+    p, ul, address {
+      margin: 0 0 1em;
+      font-size: 1rem;
+    }
+    ul {
+      padding-left: 1.25rem;
+    }
+    li + li {
+      margin-top: 0.25em;
+    }
+    .toc-panel {
+      position: sticky;
+      top: 32px;
+      font-size: 0.92rem;
+    }
+    .toc-title {
+      margin: 0 0 1rem;
+      font-size: 1rem;
+      font-family: "Mozilla Headline", sans-serif;
+    }
+    .toc-list {
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      font-family: "Mozilla Headline", sans-serif;
+    }
+    .toc-item {
+      margin: 0;
+      padding: 0;
+    }
+    .toc-item + .toc-item {
+      margin-top: 0.35rem;
+    }
+    .toc-level-2 {
+      padding-left: 1rem;
+    }
+    .toc-level-3 {
+      padding-left: 2rem;
+    }
+    .toc-level-4 {
+      padding-left: 3rem;
+    }
+    .stamp {
+      margin-top: 2rem;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+    section:first-of-type h2 {
+      margin-top: 0;
+    }
+    .boilerplate {
+      margin-bottom: 1.8rem;
+    }
+    address {
+      font-style: normal;
+    }
+    a {
+      color: var(--accent);
+      text-decoration: underline;
+    }
+    .abstract,
+    .middle,
+    .back {
+      margin-top: 1.35rem;
+    }
+    .ref-list {
+      margin: 0 0 1.2rem;
+    }
+    .ref-entry {
+      display: grid;
+      grid-template-columns: max-content minmax(0, 1fr);
+      gap: 1rem;
+      align-items: start;
+    }
+    .ref-entry + .ref-entry {
+      margin-top: 0.75rem;
+    }
+    .ref-label {
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .ref-text {
+      min-width: 0;
+    }
+    .author-address + .author-address {
+      margin-top: 1rem;
+    }
+    @media (max-width: 700px) {
+      main {
+        padding: 28px 16px 40px;
+      }
+      .page-layout {
+        grid-template-columns: 1fr;
+        gap: 36px;
+      }
+      .toc-panel {
+        position: static;
+        order: -1;
+      }
+      .doc-meta-row {
+        grid-template-columns: 108px minmax(0, 1fr);
+      }
+      .doc-meta dt {
+        text-align: left;
+      }
+      .ref-entry {
+        grid-template-columns: 1fr;
+        gap: 0.15rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <div class="page-layout">
+      <article class="doc">
+        <header class="doc-header">
+  <dl class="doc-meta">
+    <div class="doc-meta-row"><dt>Stream Draft:</dt><dd>draft-cranstoun-mx-carrier-formats</dd></div>
+    <div class="doc-meta-row"><dt>Published:</dt><dd>2026-04-16</dd></div>
+  </dl>
+  <h1 class="doc-title">MX Carrier Formats Standard</h1>
+  <p class="doc-subtitle">MXS-04</p>
+</header>
+        <section class="boilerplate">
+  <h2>Status of This Memo</h2>
+  <p>This page is a rendered build of the current The Gathering draft source. Final publication status and normative effect are determined by The Gathering process.</p>
+  <h2>Copyright Notice</h2>
+  <p>Copyright (c) 2026 The Gathering and the persons identified as the document authors. All rights reserved.</p>
+  <p>This rendered output is subject to The Gathering legal and policy terms in effect on the date of publication: <a href="https://gathering.foundation/privacy-and-policies" target="_blank" rel="noreferrer">https://gathering.foundation/privacy-and-policies</a></p>
+</section>
+        <section class="abstract">
+<h2>Abstract</h2>
+<p>This document specifies the MX metadata vocabulary for source code as a carrier format. Where [MXS-01 Core Metadata](mxs-01-core-metadata.cog.md) defines the universal field dictionary any MX implementation needs, this standard adds schemas for **code** — the one carrier format for which no existing standard covers AI-governance-focused annotation.</p>
+<p>Database and media carriers are deliberately out of scope. The MX framework reuses existing standards:</p>
+<ul>
+  <li>**Databases** — defer to [DCAT v3](<a href="https://www.w3.org/TR/vocab-dcat-3/)" target="_blank" rel="noreferrer">https://www.w3.org/TR/vocab-dcat-3/)</a> (datasets, distributions, catalogues), [CSVW](<a href="https://www.w3.org/TR/tabular-metadata/)" target="_blank" rel="noreferrer">https://www.w3.org/TR/tabular-metadata/)</a> (tabular schemas, columns, keys), and [Dublin Core](<a href="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/)" target="_blank" rel="noreferrer">https://www.dublincore.org/specifications/dublin-core/dcmi-terms/)</a> (dataset identity).</li>
+  <li>**Media** — defer to [Schema.org](<a href="https://schema.org/)" target="_blank" rel="noreferrer">https://schema.org/)</a> (`ImageObject`, `VideoObject`, `AudioObject`, `CreativeWork`, `license`) and the native embedded-metadata standards (EXIF, IPTC, XMP, ID3).</li>
+</ul>
+<p>An MX-aware document describing a dataset or an image declares its metadata using those vocabularies directly; MX does not reinvent them. For code, no single equivalent standard covers the AI-agent-focused governance annotations MX needs (`mx:sensitive`, `mx:intentional`, `ai.doNotModify`, rate-limit declarations on API surfaces) — so this standard fills that gap.</p>
+<p>**Machine-readable source.** The canonical field dictionary for this standard is [`mx-canon/ssot/fields-data-carriers.yaml`](../../../mx-canon/ssot/fields-data-carriers.yaml) — ~40 code-family fields. Together with [`mx-canon/ssot/fields-data.yaml`](../../../mx-canon/ssot/fields-data.yaml) (the core) they constitute The Gathering's complete open-standard metadata vocabulary.</p>
+</section>
+<section class="middle">
+<h2 id="1-conformance">1. Conformance</h2>
+<p>The key words &quot;MUST&quot;, &quot;MUST NOT&quot;, &quot;REQUIRED&quot;, &quot;SHALL&quot;, &quot;SHALL NOT&quot;, &quot;SHOULD&quot;, &quot;SHOULD NOT&quot;, &quot;RECOMMENDED&quot;, &quot;MAY&quot;, and &quot;OPTIONAL&quot; in this document are to be interpreted as described in [RFC 2119](<a href="https://www.rfc-editor.org/rfc/rfc2119)." target="_blank" rel="noreferrer">https://www.rfc-editor.org/rfc/rfc2119).</a></p>
+<p>This standard adopts the Level 1 / Level 2 / Level 3 conformance framework defined in [MXS-01 §2.1](mxs-01-core-metadata.cog.md#2-conformance) by reference.</p>
+<h3 id="11-selective-adoption">1.1. Selective adoption</h3>
+<p>An implementation is **code-conformant at Level N for profile P** if, for every code artefact it emits that matches profile P, it declares the Level-N-required fields of profile P. Implementations MAY claim conformance for any subset of code profiles. The claim is per-profile, not global.</p>
+<p>Example: a documentation CMS that renders syntax-highlighted code blocks inside prose MAY claim Level 2 conformance for profile `code-inline` without claiming conformance for `code-api` or `code-repository`.</p>
+<h3 id="12-baseline-dependency">1.2. Baseline dependency</h3>
+<p>Every code-carrier document inherits the Level 1 identity fields from MXS-01 (`title`, `author`, `created`, `description`). A code-carrier document MUST satisfy those identity fields regardless of which code profile it targets.</p>
+<h3 id="13-database-and-media-conformance">1.3. Database and media conformance</h3>
+<p>Implementations seeking metadata conformance for datasets, tables, columns, images, video, or audio look to the external standards cited in §1 Abstract. MX makes no conformance claim for those carriers.</p>
+<p>---</p>
+<h2 id="2-code-profile-family">2. Code profile family</h2>
+<p>Applies to source code files — functions, classes, API endpoint definitions, tests, inline annotations, dependency declarations, and repository-level metadata. Used when a document IS a code artefact or embeds code as first-class content.</p>
+<h3 id="21-canonical-carrier-syntax">2.1. Canonical carrier syntax</h3>
+<p>Per MXS-02, code carriers use the native metadata mechanism of their file format:</p>
+<p>| Carrier | Native mechanism | Syntax | |---------|------------------|--------| | JavaScript / TypeScript | JSDoc comments | `@mx:&lt;field&gt; &lt;value&gt;` | | CSS | CSS block comments | `/* @mx:&lt;field&gt; &lt;value&gt; */` | | Shell | Shell block comments | `# &lt;field&gt;: &lt;value&gt;` (after shebang) | | Any | YAML frontmatter in `.cog.*` files | camelCase field names |</p>
+<p>Inline code annotations (`mx:begin` / `mx:end` pairs, `mx:intentional`, `mx:sensitive`, `mx:ai`, `mx:todo`) use the same mechanism.</p>
+<h3 id="22-profiles">2.2. Profiles</h3>
+<p>| Profile | Purpose | Representative fields | |---------|---------|----------------------| | `code-file` | File-level metadata | `owner`, `pattern`, `moduleType` | | `code-function` | Function-level metadata | `pure`, `idempotent`, `complexity`, `throws`, `pattern` | | `code-class` | Class-level metadata | `pattern`, `extends`, `implements` | | `code-api` | API endpoint metadata | `endpoint`, `method`, `auth`, `rateLimit`, `cache.*` | | `code-test` | Test file metadata | `testType`, `fixtures`, `coverageTarget` | | `code-inline` | Inline annotations | `mx:begin`, `mx:end`, `mx:intentional`, `mx:sensitive`, `mx:todo`, `mx:ai` | | `code-dependency` | Dependency metadata | `dependencyOf`, `peerDependencies` | | `code-repository` | Repository-level | `primaryLanguages`, `branchConvention`, `releaseCadence` | | `script` | Executable scripts | `script-specific primitives` |</p>
+<p>Full field inventory lives in [`fields-data-carriers.yaml`](../../../mx-canon/ssot/fields-data-carriers.yaml).</p>
+<p>---</p>
+<h2 id="3-interaction-with-mxs-01">3. Interaction with MXS-01</h2>
+<p>Every code-carrier document inherits the Zone 1 identity contract from MXS-01 §3:</p>
+<ul>
+  <li>`title` REQUIRED</li>
+  <li>`author` REQUIRED</li>
+  <li>`created` REQUIRED</li>
+  <li>`description` RECOMMENDED</li>
+</ul>
+<p>These apply regardless of profile. A `.cog.js` file MUST declare these in its top-level JSDoc or an explicit frontmatter block.</p>
+<p>Zone 2 operational fields from MXS-01 §4 (`status`, `contentType`, `tags`, `audience`, `license`, `runbook`) remain available to code documents and SHOULD be used where they apply.</p>
+<p>---</p>
+<h2 id="4-vendor-extensions">4. Vendor extensions</h2>
+<p>Vendor extensions to code profiles follow the same three-level namespace policy as MXS-02:</p>
+<ul>
+  <li>**Standard** (no prefix): this document.</li>
+  <li>**Vendor public** (`x-&lt;vendor&gt;-` prefix): vendor-specific additions, openly published.</li>
+  <li>**Vendor private** (`x-&lt;vendor&gt;-p-` prefix): vendor-specific additions, obfuscated or registry-decoded.</li>
+</ul>
+<p>CogNovaMX's code-related extensions live in `cognovamx-fields.yaml` and are not part of this standard.</p>
+<p>---</p>
+<h2 id="5-relationship-to-existing-standards">5. Relationship to existing standards</h2>
+<p>MX is explicit about deferring to established vocabularies. Within code carriers specifically:</p>
+<ul>
+  <li>**JSDoc / TSDoc** — MX does not redefine `@param`, `@returns`, `@throws`, or other JSDoc tags. MX adds `@mx:*` tags for governance concerns JSDoc does not cover (AI policy, security annotations, pipeline stage).</li>
+  <li>**OpenAPI** — `code-api` fields describe a function that serves an API endpoint. For full API surface specification (request/response schemas, error codes, examples), implementations use [OpenAPI](<a href="https://www.openapis.org/)." target="_blank" rel="noreferrer">https://www.openapis.org/).</a> MXS-04 does not duplicate OpenAPI.</li>
+  <li>**package.json / pyproject.toml** — `code-dependency` fields supplement, not replace, native dependency manifests.</li>
+  <li>**Dublin Core / Schema.org** — generic metadata (dates, rights, formats, display names) uses the pass-through fields declared in MXS-01 (aligned with `dc:*` and `schema:*`), not code-specific redefinitions.</li>
+</ul>
+<p>---</p>
+<h2 id="6-registry-references">6. Registry &amp; references</h2>
+<p>- [DCAT v3](<a href="https://www.w3.org/TR/vocab-dcat-3/)" target="_blank" rel="noreferrer">https://www.w3.org/TR/vocab-dcat-3/)</a> — datasets and data catalogues - [CSVW](<a href="https://www.w3.org/TR/tabular-metadata/)" target="_blank" rel="noreferrer">https://www.w3.org/TR/tabular-metadata/)</a> — tabular data schemas - [Dublin Core](<a href="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/)" target="_blank" rel="noreferrer">https://www.dublincore.org/specifications/dublin-core/dcmi-terms/)</a> — generic resource metadata - [Schema.org](<a href="https://schema.org/)" target="_blank" rel="noreferrer">https://schema.org/)</a> — web content vocabulary (ImageObject, VideoObject, AudioObject, CreativeWork) - [EXIF](<a href="https://www.cipa.jp/std/documents/e/DC-008-Translation-2019-E.pdf)" target="_blank" rel="noreferrer">https://www.cipa.jp/std/documents/e/DC-008-Translation-2019-E.pdf)</a> / [IPTC](<a href="https://iptc.org/standards/photo-metadata/)" target="_blank" rel="noreferrer">https://iptc.org/standards/photo-metadata/)</a> / [XMP](<a href="https://developer.adobe.com/xmp/docs/XMPSpecifications/)" target="_blank" rel="noreferrer">https://developer.adobe.com/xmp/docs/XMPSpecifications/)</a> — embedded media metadata</p>
+<div class="ref-list">
+  <div class="ref-entry"><div class="ref-label">[**Machine-readable]</div><div class="ref-text">** [`mx-canon/ssot/fields-data-carriers.yaml`](../../../mx-canon/ssot/fields-data-carriers.yaml)</div></div>
+  <div class="ref-entry"><div class="ref-label">[**Human-readable]</div><div class="ref-text">** Appendix M §25 (Carrier Format Metadata Map), §26 (HTML Carrier Writing Guide)</div></div>
+  <div class="ref-entry"><div class="ref-label">[**Companionstandards]</div><div class="ref-text">** [MXS-01 Core Metadata](mxs-01-core-metadata.cog.md), [MXS-02 Extensions](mxs-02-extensions.cog.md)</div></div>
+  <div class="ref-entry"><div class="ref-label">[**ExternalstandardsMXdefersto]</div><div class="ref-text">**</div></div>
+</div>
+<p>---</p>
+<h2 id="7-open-questions">7. Open questions</h2>
+<p>These are flagged for Gathering review before 1.0 publication:</p>
+<p>1. **Aspirational vs ratified fields.** The code dictionary currently contains several fields with zero observed usage (e.g. `fixtures`, `coverageTarget`, `rateLimit`). Should the 1.0 standard ratify them (forward contract) or defer until documented usage exists? 2. **Overlap with JSDoc / TSDoc extensions.** Several JavaScript/TypeScript ecosystems define their own JSDoc extensions (Google Closure, TypeDoc, etc.). Should MXS-04 document known overlaps and preferred resolutions, or stay orthogonal? 3. **Inline annotation delimiters.** The `mx:begin` / `mx:end` pair requires paired parsing. Would single-statement annotations (one comment per governed line) be simpler for implementers?</p>
+<p>---</p>
+<h2 id="8-changelog">8. Changelog</h2>
+<ul>
+  <li>**2026-04-15** — 1.0-draft initial draft. Code-only scope. Databases and media explicitly deferred to DCAT/CSVW/Schema.org/EXIF/XMP per The Gathering's &quot;reuse existing standards, do not duplicate&quot; principle.</li>
+</ul>
+<p>---</p>
+<p>*End of MX Carrier Formats Standard draft.*</p>
+</section>
+<section class="back">
+<h2 id="acknowledgments">Acknowledgments</h2>
+<p>Tom Cranstoun and Maxine (CogNovaMX). Machine-readable field dictionary: mx-canon/ssot/fields-data.yaml.</p>
+</section>
+<section class="generated-references">
+  <h2 id="9-references">9. References</h2>
+  <h3 id="91-normative-references">9.1. Normative References</h3>
+  <div class="ref-list">
+  <div class="ref-entry"><div class="ref-label">[MXS-01]</div><div class="ref-text">MX Core Metadata Standard, <a href="https://github.com/TG-Community/draft-cranstoun-mx-core-metadata" target="_blank" rel="noreferrer">https://github.com/TG-Community/draft-cranstoun-mx-core-metadata</a></div></div>
+  <div class="ref-entry"><div class="ref-label">[MXS-02]</div><div class="ref-text">MX Extensions Standard, <a href="https://github.com/TG-Community/draft-cranstoun-mx-extensions" target="_blank" rel="noreferrer">https://github.com/TG-Community/draft-cranstoun-mx-extensions</a></div></div>
+</div>
+  <h3 id="92-informative-references">9.2. Informative References</h3>
+  <p>This document has no informative references.</p>
+</section>
+        <p class="stamp">Rendered from draft-cranstoun-mx-carrier-formats.md at 2026-04-16T20:19:37.020Z</p>
+      </article>
+      <aside class="toc-panel">
+  <h2 class="toc-title">Table of Contents</h2>
+  <ol class="toc-list">
+    <li class="toc-item toc-level-1"><a href="#1-conformance">1. Conformance</a></li>
+    <li class="toc-item toc-level-2"><a href="#11-selective-adoption">1.1. Selective adoption</a></li>
+    <li class="toc-item toc-level-2"><a href="#12-baseline-dependency">1.2. Baseline dependency</a></li>
+    <li class="toc-item toc-level-2"><a href="#13-database-and-media-conformance">1.3. Database and media conformance</a></li>
+    <li class="toc-item toc-level-1"><a href="#2-code-profile-family">2. Code profile family</a></li>
+    <li class="toc-item toc-level-2"><a href="#21-canonical-carrier-syntax">2.1. Canonical carrier syntax</a></li>
+    <li class="toc-item toc-level-2"><a href="#22-profiles">2.2. Profiles</a></li>
+    <li class="toc-item toc-level-1"><a href="#3-interaction-with-mxs-01">3. Interaction with MXS-01</a></li>
+    <li class="toc-item toc-level-1"><a href="#4-vendor-extensions">4. Vendor extensions</a></li>
+    <li class="toc-item toc-level-1"><a href="#5-relationship-to-existing-standards">5. Relationship to existing standards</a></li>
+    <li class="toc-item toc-level-1"><a href="#6-registry-references">6. Registry &amp; references</a></li>
+    <li class="toc-item toc-level-1"><a href="#7-open-questions">7. Open questions</a></li>
+    <li class="toc-item toc-level-1"><a href="#8-changelog">8. Changelog</a></li>
+    <li class="toc-item toc-level-1"><a href="#9-references">9. References</a></li>
+    <li class="toc-item toc-level-2"><a href="#91-normative-references">9.1. Normative References</a></li>
+    <li class="toc-item toc-level-2"><a href="#92-informative-references">9.2. Informative References</a></li>
+    <li class="toc-item toc-level-1"><a href="#acknowledgments">Acknowledgments</a></li>
+  </ol>
+</aside>
+    </div>
+  </main>
+</body>
+</html>
