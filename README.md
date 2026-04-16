@@ -1,16 +1,41 @@
-# Stream Draft Template
+# draft-cranstoun-mx-carrier-formats
 
 > [!TIP]
-> Use this repository as a template to start working on The Gathering Stream drafts.
+> This repository is the working area for The Gathering Stream draft, "draft-cranstoun-mx-carrier-formats".
 
-## Steps
+## Quick links
+
+- [Editor's Copy](https://TG-Community.github.io/draft-cranstoun-mx-carrier-formats/)
+- [Stream Draft Record](https://stream.tg.community/doc/draft-cranstoun-mx-carrier-formats)
+- [Latest Release](https://github.com/TG-Community/draft-cranstoun-mx-carrier-formats/releases/latest)
+- [Stream Draft Content Guidelines](https://tg.community/authors/stream-draft/content-guidelines)
+
+## How to publish your draft on Stream
 
 > [!IMPORTANT]
-> When creating your repository in step 1, make sure to check **Include all branches**. Otherwise, you will need to enable GitHub Pages manually.
+> Make sure your GitHub account is connected to your Stream account in [Profile Settings](https://stream.tg.community/profile).
 
-1. [Create a new repository from this template](https://github.com/TG-Community/stream-draft-template/generate).
-2. Once your repository is created, start by [renaming the `draft-todo-author-stream.md` file](../../edit/main/draft-todo-author-stream.md).
+1. Commit your draft updates to the `main` branch.
+2. Open the repository on GitHub and go to **Releases**.
+3. Click **Draft a new release**.
+4. In **Tag**, create a release tag for this publication.
+   Use `draft-cranstoun-mx-carrier-formats-00` for the first published version.
+   Use `draft-cranstoun-mx-carrier-formats-01`, `draft-cranstoun-mx-carrier-formats-02`, and so on for later versions.
+5. Keep the release target set to `main`.
+6. Set the release title. Using the same value as the tag is recommended.
+7. Click **Publish release**.
+8. Wait for the GitHub Actions release workflow to finish.
+   That workflow publishes the editor's copy, creates the versioned artifacts, and syncs the draft to Stream.
 
-## Authoring guidelines
+## Contributing
 
-- [Stream Draft Content Guidelines](https://tg.community/authors/stream-draft/content-guidelines)
+See [CONTRIBUTING.md](./CONTRIBUTING.md) for contribution guidance.
+
+## Local build
+
+Build the editor's copy and text output with:
+
+```bash
+npm install
+npm run build
+```
