@@ -210,7 +210,7 @@
         <header class="doc-header">
   <dl class="doc-meta">
     <div class="doc-meta-row"><dt>Stream Draft:</dt><dd>draft-cranstoun-mx-carrier-formats</dd></div>
-    <div class="doc-meta-row"><dt>Published:</dt><dd>2026-04-16</dd></div>
+    <div class="doc-meta-row"><dt>Published:</dt><dd>2026-04-17</dd></div>
   </dl>
   <h1 class="doc-title">MX Carrier Formats Standard</h1>
   <p class="doc-subtitle">MXS-04</p>
@@ -224,101 +224,111 @@
 </section>
         <section class="abstract">
 <h2>Abstract</h2>
-<p>This document specifies the MX metadata vocabulary for source code as a carrier format. Where [MXS-01 Core Metadata](mxs-01-core-metadata.cog.md) defines the universal field dictionary any MX implementation needs, this standard adds schemas for **code** — the one carrier format for which no existing standard covers AI-governance-focused annotation.</p>
-<p>Database and media carriers are deliberately out of scope. The MX framework reuses existing standards:</p>
-<ul>
-  <li>**Databases** — defer to [DCAT v3](<a href="https://www.w3.org/TR/vocab-dcat-3/)" target="_blank" rel="noreferrer">https://www.w3.org/TR/vocab-dcat-3/)</a> (datasets, distributions, catalogues), [CSVW](<a href="https://www.w3.org/TR/tabular-metadata/)" target="_blank" rel="noreferrer">https://www.w3.org/TR/tabular-metadata/)</a> (tabular schemas, columns, keys), and [Dublin Core](<a href="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/)" target="_blank" rel="noreferrer">https://www.dublincore.org/specifications/dublin-core/dcmi-terms/)</a> (dataset identity).</li>
-  <li>**Media** — defer to [Schema.org](<a href="https://schema.org/)" target="_blank" rel="noreferrer">https://schema.org/)</a> (`ImageObject`, `VideoObject`, `AudioObject`, `CreativeWork`, `license`) and the native embedded-metadata standards (EXIF, IPTC, XMP, ID3).</li>
-</ul>
-<p>An MX-aware document describing a dataset or an image declares its metadata using those vocabularies directly; MX does not reinvent them. For code, no single equivalent standard covers the AI-agent-focused governance annotations MX needs (`mx:sensitive`, `mx:intentional`, `ai.doNotModify`, rate-limit declarations on API surfaces) — so this standard fills that gap.</p>
-<p>**Machine-readable source.** The canonical field dictionary for this standard is [`mx-canon/ssot/fields-data-carriers.yaml`](../../../mx-canon/ssot/fields-data-carriers.yaml) — ~40 code-family fields. Together with [`mx-canon/ssot/fields-data.yaml`](../../../mx-canon/ssot/fields-data.yaml) (the core) they constitute The Gathering's complete open-standard metadata vocabulary.</p>
+<p>This document specifies the MX metadata vocabulary for source code as a carrier format. It is deliberately narrow. Code files are documents, and as documents they inherit the full universal vocabulary defined by MXS-01 Core Metadata. This standard adds only the fields that are specific to code as a carrier and are not already covered by the core — a minimum viable set of code-specific provenance fields.</p>
+<p>What the code does — function signatures, API surfaces, test metadata, type systems, invariants, behaviour — is explicitly out of scope. Each language already has its own convention for this (JSDoc, Python docstrings, Doxygen, rustdoc, godoc). MX does not duplicate them.</p>
+<p>Database and media carriers remain out of scope. The MX framework reuses existing standards: DCAT v3, CSVW, and Dublin Core for databases and datasets; Schema.org, EXIF, IPTC, XMP, and ID3 for media; each language's own documentation convention for code behaviour.</p>
+<p>The canonical field dictionary for this standard is `fields-data-carriers.yaml` in the public MX canon — two fields, down from forty in the v1.0-proposed draft. Together with `fields-data.yaml` (the core, 62 fields) they constitute The Gathering's complete open-standard metadata vocabulary.</p>
+<p>The tight scope is deliberate. Refer to the field triage rubric (`field-triage-rubric.cog.md` in the MX canon) for the rule every candidate field must pass.</p>
 </section>
 <section class="middle">
 <h2 id="1-conformance">1. Conformance</h2>
-<p>The key words &quot;MUST&quot;, &quot;MUST NOT&quot;, &quot;REQUIRED&quot;, &quot;SHALL&quot;, &quot;SHALL NOT&quot;, &quot;SHOULD&quot;, &quot;SHOULD NOT&quot;, &quot;RECOMMENDED&quot;, &quot;MAY&quot;, and &quot;OPTIONAL&quot; in this document are to be interpreted as described in [RFC 2119](<a href="https://www.rfc-editor.org/rfc/rfc2119)." target="_blank" rel="noreferrer">https://www.rfc-editor.org/rfc/rfc2119).</a></p>
-<p>This standard adopts the Level 1 / Level 2 / Level 3 conformance framework defined in [MXS-01 §2.1](mxs-01-core-metadata.cog.md#2-conformance) by reference.</p>
+<p>The key words &quot;MUST&quot;, &quot;MUST NOT&quot;, &quot;REQUIRED&quot;, &quot;SHALL&quot;, &quot;SHALL NOT&quot;, &quot;SHOULD&quot;, &quot;SHOULD NOT&quot;, &quot;RECOMMENDED&quot;, &quot;MAY&quot;, and &quot;OPTIONAL&quot; in this document are to be interpreted as described in RFC 2119.</p>
+<p>This standard adopts the Level 1 / Level 2 / Level 3 conformance framework defined in MXS-01 by reference.</p>
 <h3 id="11-selective-adoption">1.1. Selective adoption</h3>
-<p>An implementation is **code-conformant at Level N for profile P** if, for every code artefact it emits that matches profile P, it declares the Level-N-required fields of profile P. Implementations MAY claim conformance for any subset of code profiles. The claim is per-profile, not global.</p>
-<p>Example: a documentation CMS that renders syntax-highlighted code blocks inside prose MAY claim Level 2 conformance for profile `code-inline` without claiming conformance for `code-api` or `code-repository`.</p>
+<p>An implementation is **code-conformant at Level N** if, for every code artefact it emits, it satisfies the Level-N identity fields from MXS-01 and, where applicable, declares the MXS-04 provenance fields defined in the following section. Implementations MAY claim code conformance without adopting every field; `sourceRepo` and `derivedFromCommit` are both OPTIONAL.</p>
 <h3 id="12-baseline-dependency">1.2. Baseline dependency</h3>
-<p>Every code-carrier document inherits the Level 1 identity fields from MXS-01 (`title`, `author`, `created`, `description`). A code-carrier document MUST satisfy those identity fields regardless of which code profile it targets.</p>
+<p>Every code-carrier document inherits the Level 1 identity fields from MXS-01 (`title`, `author`, `created`, `description`). A code-carrier document MUST satisfy those identity fields regardless of whether it declares any MXS-04 field.</p>
 <h3 id="13-database-and-media-conformance">1.3. Database and media conformance</h3>
-<p>Implementations seeking metadata conformance for datasets, tables, columns, images, video, or audio look to the external standards cited in §1 Abstract. MX makes no conformance claim for those carriers.</p>
+<p>Implementations seeking metadata conformance for datasets, tables, columns, images, video, or audio look to the external standards cited in the abstract. MX makes no conformance claim for those carriers.</p>
 <p>---</p>
-<h2 id="2-code-profile-family">2. Code profile family</h2>
-<p>Applies to source code files — functions, classes, API endpoint definitions, tests, inline annotations, dependency declarations, and repository-level metadata. Used when a document IS a code artefact or embeds code as first-class content.</p>
-<h3 id="21-canonical-carrier-syntax">2.1. Canonical carrier syntax</h3>
+<h2 id="2-the-code-vocabulary">2. The code vocabulary</h2>
+<p>Applies to source code files. The vocabulary is two fields, each carrying provenance that is specific to code as a document and not already covered by MXS-01's universal identity vocabulary (`author`, `license`, `derivedFrom`, `source`).</p>
+<h3 id="21-fields">2.1. Fields</h3>
+<p>**`sourceRepo`** (OPTIONAL, string). URL or path of the source-control repository that holds this code file's authoritative history. Lets a reader locate the canonical copy and its change history. Aligns with Schema.org `codeRepository`.</p>
+<p>**`derivedFromCommit`** (OPTIONAL, string). Version-control commit identifier (typically a git SHA) that this artefact was derived from. Gives precise pedigree when the artefact is a build output, a transpiled copy, or a distributed snapshot of a specific repository state. Complements `derivedFrom` in MXS-01 with commit-level specificity.</p>
+<p>Every other concern that the v1.0-proposed draft covered — function annotations, API surface, test metadata, class invariants, dependency declarations, runtime config, build conventions — is either out of scope entirely (deferred to the language convention) or handled generically by MXS-01 identity fields.</p>
+<h3 id="22-canonical-carrier-syntax">2.2. Canonical carrier syntax</h3>
 <p>Per MXS-02, code carriers use the native metadata mechanism of their file format:</p>
-<p>| Carrier | Native mechanism | Syntax | |---------|------------------|--------| | JavaScript / TypeScript | JSDoc comments | `@mx:&lt;field&gt; &lt;value&gt;` | | CSS | CSS block comments | `/* @mx:&lt;field&gt; &lt;value&gt; */` | | Shell | Shell block comments | `# &lt;field&gt;: &lt;value&gt;` (after shebang) | | Any | YAML frontmatter in `.cog.*` files | camelCase field names |</p>
-<p>Inline code annotations (`mx:begin` / `mx:end` pairs, `mx:intentional`, `mx:sensitive`, `mx:ai`, `mx:todo`) use the same mechanism.</p>
-<h3 id="22-profiles">2.2. Profiles</h3>
-<p>| Profile | Purpose | Representative fields | |---------|---------|----------------------| | `code-file` | File-level metadata | `owner`, `pattern`, `moduleType` | | `code-function` | Function-level metadata | `pure`, `idempotent`, `complexity`, `throws`, `pattern` | | `code-class` | Class-level metadata | `pattern`, `extends`, `implements` | | `code-api` | API endpoint metadata | `endpoint`, `method`, `auth`, `rateLimit`, `cache.*` | | `code-test` | Test file metadata | `testType`, `fixtures`, `coverageTarget` | | `code-inline` | Inline annotations | `mx:begin`, `mx:end`, `mx:intentional`, `mx:sensitive`, `mx:todo`, `mx:ai` | | `code-dependency` | Dependency metadata | `dependencyOf`, `peerDependencies` | | `code-repository` | Repository-level | `primaryLanguages`, `branchConvention`, `releaseCadence` | | `script` | Executable scripts | `script-specific primitives` |</p>
-<p>Full field inventory lives in [`fields-data-carriers.yaml`](../../../mx-canon/ssot/fields-data-carriers.yaml).</p>
+<p>| Carrier | Native mechanism | Example | |---------|------------------|---------| | JavaScript / TypeScript | JSDoc comments | `@mx:sourceRepo <a href="https://github.com/...`" target="_blank" rel="noreferrer">https://github.com/...`</a> | | CSS | CSS block comments | `/* @mx:sourceRepo <a href="https://github.com/..." target="_blank" rel="noreferrer">https://github.com/...</a> */` | | Shell | Shell comment block | `# sourceRepo: <a href="https://github.com/...`" target="_blank" rel="noreferrer">https://github.com/...`</a> (after shebang) | | SQL | SQL comment block | `-- @mx sourceRepo: <a href="https://github.com/...`" target="_blank" rel="noreferrer">https://github.com/...`</a> | | Any | YAML frontmatter in `.cog.*` files | `sourceRepo: <a href="https://github.com/...`" target="_blank" rel="noreferrer">https://github.com/...`</a> |</p>
+<p>The carrier mechanism is the syntax; the field names in the vocabulary are identical across all carriers. A JavaScript file declaring `@mx:sourceRepo` and a `.cog.md` declaring `sourceRepo:` carry the same semantic value.</p>
+<h3 id="23-profiles">2.3. Profiles</h3>
+<p>MXS-04 declares a single profile: `code`. An implementation handling code artefacts applies the `code` profile's fields in addition to the core identity fields. No per-language sub-profiles — the vocabulary is language-agnostic.</p>
 <p>---</p>
-<h2 id="3-interaction-with-mxs-01">3. Interaction with MXS-01</h2>
-<p>Every code-carrier document inherits the Zone 1 identity contract from MXS-01 §3:</p>
+<h2 id="3-what-this-standard-does-not-cover">3. What this standard does NOT cover</h2>
+<p>MXS-04 is scoped by the field triage rubric. The following concerns were in the v1.0-proposed draft and are now explicitly out of scope:</p>
+<ul>
+  <li>**Function-level annotations** (`pure`, `idempotent`, `complexity`, `throws`, `returns`, `param`) — defer to JSDoc, Python docstring convention, Doxygen, rustdoc, godoc.</li>
+  <li>**API surface specification** (HTTP method, path, auth, rate limits, cache semantics) — defer to OpenAPI.</li>
+  <li>**Test metadata** (test type, coverage targets, fixtures) — defer to test framework conventions.</li>
+  <li>**Class-level annotations** (design pattern, thread-safety, invariants) — defer to language convention and code reviews.</li>
+  <li>**Dependency vocabulary** (purpose, criticality, upgrade policy, alternatives considered) — defer to package manifests (`package.json`, `pyproject.toml`, `Cargo.toml`) and Architecture Decision Records.</li>
+  <li>**Runtime configuration** (interpreter, language version, framework versions) — defer to native config (`.node-version`, `.tool-versions`, shebang lines, package manifests).</li>
+  <li>**Coding conventions** (style, testing conventions, documentation conventions) — defer to linter configs and community style guides.</li>
+  <li>**Inline code annotations** (`mx:begin`, `mx:end`, `mx:sensitive`, `mx:intentional`, `mx:todo`, `mx:ai`) — each language already has its own TODO-comment and annotation conventions.</li>
+</ul>
+<p>If an implementation needs any of these, it uses the relevant external convention. MXS-04 does not duplicate them.</p>
+<p>---</p>
+<h2 id="4-interaction-with-mxs-01">4. Interaction with MXS-01</h2>
+<p>Every code-carrier document inherits the Level 1 identity contract from MXS-01:</p>
 <ul>
   <li>`title` REQUIRED</li>
   <li>`author` REQUIRED</li>
   <li>`created` REQUIRED</li>
   <li>`description` RECOMMENDED</li>
 </ul>
-<p>These apply regardless of profile. A `.cog.js` file MUST declare these in its top-level JSDoc or an explicit frontmatter block.</p>
-<p>Zone 2 operational fields from MXS-01 §4 (`status`, `contentType`, `tags`, `audience`, `license`, `runbook`) remain available to code documents and SHOULD be used where they apply.</p>
-<p>---</p>
-<h2 id="4-vendor-extensions">4. Vendor extensions</h2>
-<p>Vendor extensions to code profiles follow the same three-level namespace policy as MXS-02:</p>
+<p>These apply regardless of whether any MXS-04 field is declared. A `.cog.js` file MUST declare these in its top-level JSDoc or an explicit frontmatter block.</p>
+<p>Level 2 fields from MXS-01 (`status`, `contentType`, `tags`, `audience`, `license`, `runbook`) remain available to code documents and SHOULD be used where they apply. In particular:</p>
 <ul>
-  <li>**Standard** (no prefix): this document.</li>
-  <li>**Vendor public** (`x-&lt;vendor&gt;-` prefix): vendor-specific additions, openly published.</li>
+  <li>`license` — MXS-01 covers the licence field universally; code files use the same field.</li>
+  <li>`derivedFrom` — MXS-01 covers generic provenance pointers; `derivedFromCommit` in this standard adds commit-level precision when the artefact is a build output.</li>
+  <li>`maintainer`, `publisher` — both apply to code as to any other document.</li>
+</ul>
+<p>---</p>
+<h2 id="5-vendor-extensions">5. Vendor extensions</h2>
+<p>Vendor extensions to code carriers follow the three-level namespace policy defined in MXS-02:</p>
+<ul>
+  <li>**Standard** (no prefix): this document plus MXS-01, MXS-02, MXS-03.</li>
+  <li>**Vendor public** (`x-&lt;vendor&gt;-` prefix): vendor-specific code-carrier additions, openly published.</li>
   <li>**Vendor private** (`x-&lt;vendor&gt;-p-` prefix): vendor-specific additions, obfuscated or registry-decoded.</li>
 </ul>
-<p>CogNovaMX's code-related extensions live in `cognovamx-fields.yaml` and are not part of this standard.</p>
+<p>CogNovaMX's code-adjacent extensions live in `cognovamx-fields.yaml` under the `x-mx-` prefix and are not part of this standard.</p>
 <p>---</p>
-<h2 id="5-relationship-to-existing-standards">5. Relationship to existing standards</h2>
+<h2 id="6-relationship-to-existing-standards">6. Relationship to existing standards</h2>
 <p>MX is explicit about deferring to established vocabularies. Within code carriers specifically:</p>
 <ul>
-  <li>**JSDoc / TSDoc** — MX does not redefine `@param`, `@returns`, `@throws`, or other JSDoc tags. MX adds `@mx:*` tags for governance concerns JSDoc does not cover (AI policy, security annotations, pipeline stage).</li>
-  <li>**OpenAPI** — `code-api` fields describe a function that serves an API endpoint. For full API surface specification (request/response schemas, error codes, examples), implementations use [OpenAPI](<a href="https://www.openapis.org/)." target="_blank" rel="noreferrer">https://www.openapis.org/).</a> MXS-04 does not duplicate OpenAPI.</li>
-  <li>**package.json / pyproject.toml** — `code-dependency` fields supplement, not replace, native dependency manifests.</li>
+  <li>**JSDoc / TSDoc / Python docstrings / Doxygen / rustdoc / godoc** — MX does not redefine `@param`, `@returns`, `@throws`, `@example`, or any other documentation-convention tag. Code-level documentation is each language's own convention.</li>
+  <li>**OpenAPI** — for APIs that a code file implements, full API surface specification (request/response schemas, error codes, examples) uses OpenAPI. MXS-04 does not duplicate OpenAPI.</li>
+  <li>**Package manifests** (`package.json`, `pyproject.toml`, `Cargo.toml`, `go.mod`) — dependency declarations are the native manifest's responsibility; MXS-04 does not add parallel dependency vocabulary.</li>
   <li>**Dublin Core / Schema.org** — generic metadata (dates, rights, formats, display names) uses the pass-through fields declared in MXS-01 (aligned with `dc:*` and `schema:*`), not code-specific redefinitions.</li>
+  <li>**Test framework conventions** — unit/integration/e2e classification, coverage targets, and fixtures are owned by the test framework. MXS-04 does not declare test metadata fields.</li>
 </ul>
-<p>---</p>
-<h2 id="6-registry-references">6. Registry &amp; references</h2>
-<p>- [DCAT v3](<a href="https://www.w3.org/TR/vocab-dcat-3/)" target="_blank" rel="noreferrer">https://www.w3.org/TR/vocab-dcat-3/)</a> — datasets and data catalogues - [CSVW](<a href="https://www.w3.org/TR/tabular-metadata/)" target="_blank" rel="noreferrer">https://www.w3.org/TR/tabular-metadata/)</a> — tabular data schemas - [Dublin Core](<a href="https://www.dublincore.org/specifications/dublin-core/dcmi-terms/)" target="_blank" rel="noreferrer">https://www.dublincore.org/specifications/dublin-core/dcmi-terms/)</a> — generic resource metadata - [Schema.org](<a href="https://schema.org/)" target="_blank" rel="noreferrer">https://schema.org/)</a> — web content vocabulary (ImageObject, VideoObject, AudioObject, CreativeWork) - [EXIF](<a href="https://www.cipa.jp/std/documents/e/DC-008-Translation-2019-E.pdf)" target="_blank" rel="noreferrer">https://www.cipa.jp/std/documents/e/DC-008-Translation-2019-E.pdf)</a> / [IPTC](<a href="https://iptc.org/standards/photo-metadata/)" target="_blank" rel="noreferrer">https://iptc.org/standards/photo-metadata/)</a> / [XMP](<a href="https://developer.adobe.com/xmp/docs/XMPSpecifications/)" target="_blank" rel="noreferrer">https://developer.adobe.com/xmp/docs/XMPSpecifications/)</a> — embedded media metadata</p>
-<div class="ref-list">
-  <div class="ref-entry"><div class="ref-label">[**Machine-readable]</div><div class="ref-text">** [`mx-canon/ssot/fields-data-carriers.yaml`](../../../mx-canon/ssot/fields-data-carriers.yaml)</div></div>
-  <div class="ref-entry"><div class="ref-label">[**Human-readable]</div><div class="ref-text">** Appendix M §25 (Carrier Format Metadata Map), §26 (HTML Carrier Writing Guide)</div></div>
-  <div class="ref-entry"><div class="ref-label">[**Companionstandards]</div><div class="ref-text">** [MXS-01 Core Metadata](mxs-01-core-metadata.cog.md), [MXS-02 Extensions](mxs-02-extensions.cog.md)</div></div>
-  <div class="ref-entry"><div class="ref-label">[**ExternalstandardsMXdefersto]</div><div class="ref-text">**</div></div>
-</div>
-<p>---</p>
-<h2 id="7-open-questions">7. Open questions</h2>
-<p>These are flagged for Gathering review before 1.0 publication:</p>
-<p>1. **Aspirational vs ratified fields.** The code dictionary currently contains several fields with zero observed usage (e.g. `fixtures`, `coverageTarget`, `rateLimit`). Should the 1.0 standard ratify them (forward contract) or defer until documented usage exists? 2. **Overlap with JSDoc / TSDoc extensions.** Several JavaScript/TypeScript ecosystems define their own JSDoc extensions (Google Closure, TypeDoc, etc.). Should MXS-04 document known overlaps and preferred resolutions, or stay orthogonal? 3. **Inline annotation delimiters.** The `mx:begin` / `mx:end` pair requires paired parsing. Would single-statement annotations (one comment per governed line) be simpler for implementers?</p>
-<p>---</p>
-<h2 id="8-changelog">8. Changelog</h2>
-<ul>
-  <li>**2026-04-15** — 1.0-draft initial draft. Code-only scope. Databases and media explicitly deferred to DCAT/CSVW/Schema.org/EXIF/XMP per The Gathering's &quot;reuse existing standards, do not duplicate&quot; principle.</li>
-</ul>
-<p>---</p>
-<p>*End of MX Carrier Formats Standard draft.*</p>
 </section>
 <section class="back">
-<h2 id="acknowledgments">Acknowledgments</h2>
-<p>Tom Cranstoun and Maxine (CogNovaMX). Machine-readable field dictionary: mx-canon/ssot/fields-data.yaml.</p>
+<h2 id="changelog">Changelog</h2>
+<ul>
+  <li>**2026-04-17 (v1.1-proposed)** — cut from 40 fields to 2 per the field triage rubric. Scope tightened to code-specific provenance only; behavioural vocabulary removed and deferred to language conventions.</li>
+  <li>**2026-04-15 (v1.0-proposed)** — initial draft. Code-only scope. Databases and media explicitly deferred to DCAT/CSVW/Schema.org/EXIF/XMP per The Gathering's &quot;reuse existing standards, do not duplicate&quot; principle.</li>
+</ul>
+<h2 id="references">References</h2>
+<div class="ref-list">
+  <div class="ref-entry"><div class="ref-label"></div><div class="ref-text">Field triage rubric — governs every MXS-04 field addition or removal (in the MX canon).</div></div>
+  <div class="ref-entry"><div class="ref-label"></div><div class="ref-text">Field cull log — records the 2026-04-17 cut of 40 fields down to 2.</div></div>
+  <div class="ref-entry"><div class="ref-label"></div><div class="ref-text">Companion standards — MXS-01 Core Metadata, MXS-02 Extensions, MXS-03 Provenance.</div></div>
+  <div class="ref-entry"><div class="ref-label">[ExternalstandardsMXdefersto]</div><div class="ref-text">DCAT v3, CSVW, Dublin Core, Schema.org, EXIF, IPTC, XMP, ID3, OpenAPI, JSDoc, Python Docstring (PEP 257), Doxygen, rustdoc, godoc, IETF RFC format.</div></div>
+</div>
 </section>
 <section class="generated-references">
-  <h2 id="9-references">9. References</h2>
-  <h3 id="91-normative-references">9.1. Normative References</h3>
+  <h2 id="7-references">7. References</h2>
+  <h3 id="71-normative-references">7.1. Normative References</h3>
   <div class="ref-list">
   <div class="ref-entry"><div class="ref-label">[MXS-01]</div><div class="ref-text">MX Core Metadata Standard, <a href="https://github.com/TG-Community/draft-cranstoun-mx-core-metadata" target="_blank" rel="noreferrer">https://github.com/TG-Community/draft-cranstoun-mx-core-metadata</a></div></div>
   <div class="ref-entry"><div class="ref-label">[MXS-02]</div><div class="ref-text">MX Extensions Standard, <a href="https://github.com/TG-Community/draft-cranstoun-mx-extensions" target="_blank" rel="noreferrer">https://github.com/TG-Community/draft-cranstoun-mx-extensions</a></div></div>
+  <div class="ref-entry"><div class="ref-label">[MXS-03]</div><div class="ref-text">MX Provenance Standard, <a href="https://github.com/TG-Community/draft-cranstoun-mx-provenance" target="_blank" rel="noreferrer">https://github.com/TG-Community/draft-cranstoun-mx-provenance</a></div></div>
 </div>
-  <h3 id="92-informative-references">9.2. Informative References</h3>
+  <h3 id="72-informative-references">7.2. Informative References</h3>
   <p>This document has no informative references.</p>
 </section>
-        <p class="stamp">Rendered from draft-cranstoun-mx-carrier-formats.md at 2026-04-16T20:19:37.020Z</p>
+        <p class="stamp">Rendered from draft-cranstoun-mx-carrier-formats.md at 2026-04-17T08:43:55.816Z</p>
       </article>
       <aside class="toc-panel">
   <h2 class="toc-title">Table of Contents</h2>
@@ -327,19 +337,19 @@
     <li class="toc-item toc-level-2"><a href="#11-selective-adoption">1.1. Selective adoption</a></li>
     <li class="toc-item toc-level-2"><a href="#12-baseline-dependency">1.2. Baseline dependency</a></li>
     <li class="toc-item toc-level-2"><a href="#13-database-and-media-conformance">1.3. Database and media conformance</a></li>
-    <li class="toc-item toc-level-1"><a href="#2-code-profile-family">2. Code profile family</a></li>
-    <li class="toc-item toc-level-2"><a href="#21-canonical-carrier-syntax">2.1. Canonical carrier syntax</a></li>
-    <li class="toc-item toc-level-2"><a href="#22-profiles">2.2. Profiles</a></li>
-    <li class="toc-item toc-level-1"><a href="#3-interaction-with-mxs-01">3. Interaction with MXS-01</a></li>
-    <li class="toc-item toc-level-1"><a href="#4-vendor-extensions">4. Vendor extensions</a></li>
-    <li class="toc-item toc-level-1"><a href="#5-relationship-to-existing-standards">5. Relationship to existing standards</a></li>
-    <li class="toc-item toc-level-1"><a href="#6-registry-references">6. Registry &amp; references</a></li>
-    <li class="toc-item toc-level-1"><a href="#7-open-questions">7. Open questions</a></li>
-    <li class="toc-item toc-level-1"><a href="#8-changelog">8. Changelog</a></li>
-    <li class="toc-item toc-level-1"><a href="#9-references">9. References</a></li>
-    <li class="toc-item toc-level-2"><a href="#91-normative-references">9.1. Normative References</a></li>
-    <li class="toc-item toc-level-2"><a href="#92-informative-references">9.2. Informative References</a></li>
-    <li class="toc-item toc-level-1"><a href="#acknowledgments">Acknowledgments</a></li>
+    <li class="toc-item toc-level-1"><a href="#2-the-code-vocabulary">2. The code vocabulary</a></li>
+    <li class="toc-item toc-level-2"><a href="#21-fields">2.1. Fields</a></li>
+    <li class="toc-item toc-level-2"><a href="#22-canonical-carrier-syntax">2.2. Canonical carrier syntax</a></li>
+    <li class="toc-item toc-level-2"><a href="#23-profiles">2.3. Profiles</a></li>
+    <li class="toc-item toc-level-1"><a href="#3-what-this-standard-does-not-cover">3. What this standard does NOT cover</a></li>
+    <li class="toc-item toc-level-1"><a href="#4-interaction-with-mxs-01">4. Interaction with MXS-01</a></li>
+    <li class="toc-item toc-level-1"><a href="#5-vendor-extensions">5. Vendor extensions</a></li>
+    <li class="toc-item toc-level-1"><a href="#6-relationship-to-existing-standards">6. Relationship to existing standards</a></li>
+    <li class="toc-item toc-level-1"><a href="#7-references">7. References</a></li>
+    <li class="toc-item toc-level-2"><a href="#71-normative-references">7.1. Normative References</a></li>
+    <li class="toc-item toc-level-2"><a href="#72-informative-references">7.2. Informative References</a></li>
+    <li class="toc-item toc-level-1"><a href="#changelog">Changelog</a></li>
+    <li class="toc-item toc-level-1"><a href="#references">References</a></li>
   </ol>
 </aside>
     </div>
